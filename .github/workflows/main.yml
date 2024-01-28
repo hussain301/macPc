@@ -14,9 +14,6 @@ jobs:
         curl -O https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip
         unzip ngrok-stable-darwin-amd64.zip
 
-    - name: List Files
-      run: ls -R
-
     - name: Auth
       run: |
         echo "Authenticating ngrok..."
@@ -27,7 +24,7 @@ jobs:
     - name: Enable VNC
       run: |
         echo "Enabling VNC..."
-        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users runneradmin -privs -all -restart -agent -menu
+        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users runneradmin -privs -all -restart -agent -menu -clientopts -setreqprot -protocol 3.3 -setvnclegacy -vnclegacy yes
 
     - name: Create Tunnel
       run: |
