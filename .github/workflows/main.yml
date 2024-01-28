@@ -14,12 +14,10 @@ jobs:
         curl -O https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip
         unzip ngrok-stable-darwin-amd64.zip
 
-    - name: Set VNC Password
+    - name: Enable VNC without Password
       run: |
-        echo "Setting VNC password..."
-        echo "P@ssw0rd!" > vncpassword.txt
-      env:
-        VNC_PASSWORD_FILE: vncpassword.txt
+        echo "Enabling VNC without password..."
+        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users runneradmin -privs -all -restart -agent -menu -clientopts -setreqprot -protocol 3.3 -setvnclegacy -vnclegacy yes
 
     - name: Authenticate ngrok
       run: |
@@ -27,11 +25,6 @@ jobs:
         ./ngrok authtoken $NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-
-    - name: Enable VNC
-      run: |
-        echo "Enabling VNC..."
-        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users runneradmin -privs -all -restart -agent -menu -clientopts -setreqprot -protocol 3.3 -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw $VNC_PASSWORD_FILE
 
     - name: Create ngrok Tunnel for VNC
       run: |
